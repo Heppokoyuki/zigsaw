@@ -6,7 +6,7 @@ const MemoryMap = @import("zigsaw.zig").MemoryMap;
 const serial = @import("serial.zig");
 const builtin = @import("builtin");
 const x86 = @import("x86.zig");
-const cpu = @import("cpu.zig");
+const CpuInfo = @import("cpu.zig").CpuInfo;
 
 var buf: [1000]u8 = undefined;
 
@@ -23,9 +23,10 @@ export fn _start(zigsaw: *Zigsaw) noreturn {
     var fb: [*]u8 = @intToPtr([*]u8, zigsaw.frame_buffer.base);
     var i: u32 = 0;
     var eax: u32 = 0;
+    var cpu_id: CpuInfo = CpuInfo.init();
 
     serial.writeString("hello\n");
-    cpu.init();
+    cpu_id.printVendorId();
 
     serial.printf(buf[0..], "memorymap: {}", .{zigsaw.memory_map.map[2]});
     while (i < zigsaw.frame_buffer.hr * zigsaw.frame_buffer.vr * 4) : (i += 4) {
