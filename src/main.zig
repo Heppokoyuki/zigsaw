@@ -4,6 +4,8 @@ const Zigsaw = @import("zigsaw.zig").Zigsaw;
 const FrameBuffer = @import("zigsaw.zig").FrameBuffer;
 const serial = @import("serial.zig");
 const builtin = @import("builtin");
+const x86 = @import("x86.zig");
+const cpu = @import("cpu.zig");
 
 var buf: [200]u8 = undefined;
 
@@ -19,8 +21,11 @@ export fn _start(zigsaw: *Zigsaw) noreturn {
     serial.init();
     var fb: [*]u8 = @intToPtr([*]u8, zigsaw.frame_buffer.base);
     var i: u32 = 0;
+    var eax: u32 = 0;
 
     serial.writeString("hello\n");
+    cpu.init();
+
     while (i < zigsaw.frame_buffer.hr * zigsaw.frame_buffer.vr * 4) : (i += 4) {
         fb[i] = 0;
         fb[i + 1] = 255;
