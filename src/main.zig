@@ -19,13 +19,14 @@ pub fn panic(msg: []const u8, error_return_trace: ?*builtin.StackTrace) noreturn
 }
 
 export fn _start(zigsaw: *Zigsaw) noreturn {
-    serial.init();
     var fb: [*]u8 = @intToPtr([*]u8, zigsaw.frame_buffer.base);
     var i: u32 = 0;
     var eax: u32 = 0;
-    var cpu_id: CpuInfo = CpuInfo.init();
+    var cpu_id: CpuInfo = undefined;
 
+    serial.init();
     serial.writeString("hello\n");
+    cpu_id = CpuInfo.init();
     cpu_id.printVendorId();
 
     serial.printf(buf[0..], "memorymap: {}", .{zigsaw.memory_map.map[2]});
