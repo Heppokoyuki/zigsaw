@@ -30,6 +30,6 @@ pub const CpuInfo = struct {
 
     pub fn printVendorId(self: CpuInfo) void {
         var buf: [50]u8 = undefined;
-        serial.printf(buf[0..], "Vendor: {}\n", .{self.vendor_id});
+        serial.printf(buf[0..], "Vendor: {s}\n", .{self.vendor_id});
     }
 };

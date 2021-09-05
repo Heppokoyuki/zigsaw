@@ -4,9 +4,7 @@ const x86 = @import("x86.zig");
 
 const port: u16 = @enumToInt(Port.COM1);
 
-pub const Port = enum(u16) {
-    COM1 = 0x3F8, COM2 = 0x2F8, COM3 = 0x3E8, COM4 = 0x2E8
-};
+pub const Port = enum(u16) { COM1 = 0x3F8, COM2 = 0x2F8, COM3 = 0x3E8, COM4 = 0x2E8 };
 
 pub fn init() void {
     x86.outb(port + 1, 0x00);
@@ -33,6 +31,6 @@ pub fn writeString(str: []const u8) void {
     }
 }
 
-pub fn printf(buf: []u8, comptime format: []const u8, args: var) void {
+pub fn printf(buf: []u8, comptime format: []const u8, args: anytype) void {
     writeString(fmt.bufPrint(buf, format, args) catch unreachable);
 }

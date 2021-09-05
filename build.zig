@@ -22,7 +22,7 @@ pub fn build(b: *Builder) !void {
         .abi = .gnu,
     });
     zigsaw.setOutputDir("fs");
-    zigsaw.setLinkerScriptPath("src/linker.ld");
+    zigsaw.setLinkerScriptPath(.{ .path = "src/linker.ld" });
     zigsaw.setBuildMode(mode);
     zigsaw.step.dependOn(&bootloader.step);
     b.default_step.dependOn(&zigsaw.step);
