@@ -38,8 +38,6 @@ pub fn panic(msg: []const u8, error_return_trace: ?*builtin.StackTrace) noreturn
 }
 
 export fn _start(zigsaw: *Zigsaw) noreturn {
-    var fb: [*]u8 = @intToPtr([*]u8, zigsaw.frame_buffer.base);
-    var i: u32 = 0;
     var cpu_id: CpuInfo = undefined;
 
     serial.init();
@@ -47,14 +45,9 @@ export fn _start(zigsaw: *Zigsaw) noreturn {
     cpu_id = CpuInfo.init();
     cpu_id.printVendorId();
 
-    pmm.init(zigsaw.memory_map.map[0..zigsaw.memory_map.num], &fixed_allocator.allocator) catch unreachable;
-    //    pmm.print();
+    pmm.init(zigsaw.memory_map.map[0..zigsaw.memory_map.num], &fixed_allocator.allocator()) catch unreachable;
+    pmm.print();
 
     serial.printf(buf[0..], "memorymap: {}", .{zigsaw.memory_map.map[2]});
-    while (i < zigsaw.frame_buffer.hr * zigsaw.frame_buffer.vr * 4) : (i += 4) {
-        fb[i] = 0;
-        fb[i + 1] = 255;
-        fb[i + 2] = 0;
-    }
     while (true) {}
 }
